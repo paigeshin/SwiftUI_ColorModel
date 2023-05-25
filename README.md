@@ -1,5 +1,24 @@
 # SwiftUI_ColorModel
 
+### Reference
+
+https://gist.github.com/klein-artur/025a0fa4f167a648d9ea
+
+https://www.flux-academy.com/blog/what-is-color-theory
+
+https://academy.realm.io/posts/architecting-a-robust-color-system-swift-tryswift-2017-ragone/
+
+https://github.com/vicc/chameleon
+
+https://stackoverflow.com/questions/37055755/computing-complementary-triadic-tetradic-and-analagous-colors
+
+https://swdevnotes.com/swift/2022/define-colors-with-hue-saturation-and-brightness-rather-than-red-green-and-blue-properties/
+
+https://www.swiftanytime.com/blog/whats-new-in-swiftui-colors-and-sf-symbols-ft-wwdc22
+
+https://stackoverflow.com/questions/47091979/how-to-create-monochromatic-uiimage-on-ios
+
+
 ### Color Model 
 
 ```swift
@@ -75,7 +94,7 @@ struct ColorModel {
 }
 ```
 
-### Color Model Extension 
+### Color Extension 
 
 ```swift
 struct ColorModel {
