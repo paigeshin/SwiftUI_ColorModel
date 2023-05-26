@@ -19,212 +19,110 @@ https://www.swiftanytime.com/blog/whats-new-in-swiftui-colors-and-sf-symbols-ft-
 https://stackoverflow.com/questions/47091979/how-to-create-monochromatic-uiimage-on-ios
 
 
-### Color Model 
+### Extension 
 
 ```swift
-struct ColorModel {
-    var hueDegrees: Double
-    private var sat: Double
-    private var bright: Double
-
-    let totalDegrees = 360.0
-    
-    init(hueDegrees: Double, sat: Double, bright: Double) {
-        self.hueDegrees = hueDegrees
-        self.sat = sat
-        self.bright = bright
-    }
-    
-    init() {
-        self.init(hueDegrees: 0, sat: 1.0, bright: 1.0)
-    }
-    
-    var hueDouble: Double {
-        return Double(self.hueDegrees) / totalDegrees
-    }
-
-    var color: Color {
-        return Color(hue: hueDouble, saturation: sat, brightness: bright)
-    }
-    
-    // Monochromatic
-    var monochromaticColors: [Color] {
-        return [
-            Color(hue: hueDouble, saturation: sat, brightness: bright),
-            Color(hue: hueDouble, saturation: (sat * 0.8), brightness: bright),
-            Color(hue: hueDouble, saturation: (sat * 0.6), brightness: bright),
-            Color(hue: hueDouble, saturation: (sat * 0.4), brightness: bright)
-        ]
-    }
-    
-    private func adjustHue(_ value: Double, percent adjustment: Double) -> Double {
-        return Double((Int((value * 100) + adjustment)) % 100) / 100.0
-    }
-    
-    // Analogous
-    var analogousColors: [Color] {
-        let hue1 = adjustHue(hueDouble, percent: 4)
-        let hue2 = adjustHue(hueDouble, percent: -4)
-        return [
-            Color(hue: hueDouble, saturation: sat, brightness: bright),
-            Color(hue: hue1, saturation: sat, brightness: bright),
-            Color(hue: hue2, saturation: sat, brightness: bright)
-        ]
-    }
-
-    // Complementary
-    var complementaryColors: [Color] {
-        let hue1 = adjustHue(hueDouble, percent: 50)
-        return [
-            Color(hue: hueDouble, saturation: sat, brightness: bright),
-            Color(hue: hue1, saturation: sat, brightness: bright)
-        ]
-    }
-    
-    // Triadic
-    var triadicColors: [Color] {
-        let hue1 = adjustHue(hueDouble, percent: 33.33)
-        let hue2 = adjustHue(hueDouble, percent: 66.66)
-        return [
-            Color(hue: hueDouble, saturation: sat, brightness: bright),
-            Color(hue: hue1, saturation: sat, brightness: bright),
-            Color(hue: hue2, saturation: sat, brightness: bright)
-        ]
-    }
-}
-```
-
-### Color Extension 
-
-```swift
-struct ColorModel {
-    var hueDegrees: Double
-    private var sat: Double
-    private var bright: Double
-    
-    let totalDegrees = 360.0
-    
-    init(hueDegrees: Double, sat: Double, bright: Double) {
-        self.hueDegrees = hueDegrees
-        self.sat = sat
-        self.bright = bright
-    }
-    
-    init() {
-        self.init(hueDegrees: 0, sat: 1.0, bright: 1.0)
-    }
-    
-    var hueDouble: Double {
-        return Double(self.hueDegrees) / totalDegrees
-    }
-    
-    var color: Color {
-        return Color(hue: hueDouble, saturation: sat, brightness: bright)
-    }
-    
-    // Monochromatic
-    var monochromaticColors: [Color] {
-        return [
-            Color(hue: hueDouble, saturation: sat, brightness: bright),
-            Color(hue: hueDouble, saturation: (sat * 0.8), brightness: bright),
-            Color(hue: hueDouble, saturation: (sat * 0.6), brightness: bright),
-            Color(hue: hueDouble, saturation: (sat * 0.4), brightness: bright)
-        ]
-    }
-    
-    private func adjustHue(_ value: Double, percent adjustment: Double) -> Double {
-        return Double((Int((value * 100) + adjustment)) % 100) / 100.0
-    }
-    
-    // Analogous
-    var analogousColors: [Color] {
-        let hue1 = adjustHue(hueDouble, percent: 4)
-        let hue2 = adjustHue(hueDouble, percent: -4)
-        return [
-            Color(hue: hueDouble, saturation: sat, brightness: bright),
-            Color(hue: hue1, saturation: sat, brightness: bright),
-            Color(hue: hue2, saturation: sat, brightness: bright)
-        ]
-    }
-    
-    // Complementary
-    var complementaryColors: [Color] {
-        let hue1 = adjustHue(hueDouble, percent: 50)
-        return [
-            Color(hue: hueDouble, saturation: sat, brightness: bright),
-            Color(hue: hue1, saturation: sat, brightness: bright)
-        ]
-    }
-    
-    // Triadic
-    var triadicColors: [Color] {
-        let hue1 = adjustHue(hueDouble, percent: 33.33)
-        let hue2 = adjustHue(hueDouble, percent: 66.66)
-        return [
-            Color(hue: hueDouble, saturation: sat, brightness: bright),
-            Color(hue: hue1, saturation: sat, brightness: bright),
-            Color(hue: hue2, saturation: sat, brightness: bright)
-        ]
-    }
-}
+import SwiftUI
 
 extension Color {
     
-    var colorModel: ColorModel {
-        let hue = self.rgbToHue(r: self.components.red, g: self.components.blue, b: self.components.blue)
-        return ColorModel(hueDegrees: hue.h,
-                          sat: hue.s,
-                          bright: hue.b)
+    func monochromaticColors(amount: Int) -> [Color] {
+        UIColor(self).monochromaticColors(amount: amount).map{Color(uiColor: $0)}
     }
     
-    private var components: (red: CGFloat, green: CGFloat, blue: CGFloat, opacity: CGFloat) {
+    func analogousColors(amount: Int) -> [Color] {
+        UIColor(self).analogousColors(amount: amount).map{Color(uiColor: $0)}
+    }
+    
+    func complementaryColors() -> [Color] {
+        UIColor(self).complementaryColors().map{Color(uiColor: $0)}
+    }
+    
+    func triadicColors() -> [Color] {
+        UIColor(self).triadicColors().map{Color(uiColor: $0)}
+    }
+    
+    
+}
+
+extension UIColor {
+    func monochromaticColors(amount: Int) -> [UIColor] {
+        var colors: [UIColor] = []
+        let hue = hueComponent()
+        let saturation = saturationComponent()
+        let brightness = brightnessComponent()
         
-#if canImport(UIKit)
-        typealias NativeColor = UIColor
-#elseif canImport(AppKit)
-        typealias NativeColor = NSColor
-#endif
+        let step = 1.0 / CGFloat(amount + 1)
         
-        var r: CGFloat = 0
-        var g: CGFloat = 0
-        var b: CGFloat = 0
-        var o: CGFloat = 0
-        
-        guard NativeColor(self).getRed(&r, green: &g, blue: &b, alpha: &o) else {
-            // You can handle the failure here as you want
-            return (0, 0, 0, 0)
+        for i in 1...amount {
+            let newBrightness = brightness * CGFloat(i) * step
+            let color = UIColor(hue: hue, saturation: saturation, brightness: newBrightness, alpha: 1.0)
+            colors.append(color)
         }
         
-        return (r, g, b, o)
+        return colors.reversed()
     }
     
-    
-    private func rgbToHue(r:CGFloat, g:CGFloat, b:CGFloat) -> (h:CGFloat, s:CGFloat, b:CGFloat) {
-        let minV:CGFloat = CGFloat(min(r, g, b))
-        let maxV:CGFloat = CGFloat(max(r, g, b))
-        let delta:CGFloat = maxV - minV
-        var hue:CGFloat = 0
-        if delta != 0 {
-            if r == maxV {
-                hue = (g - b) / delta
-            }
-            else if g == maxV {
-                hue = 2 + (b - r) / delta
-            }
-            else {
-                hue = 4 + (r - g) / delta
-            }
-            hue *= 60
-            if hue < 0 {
-                hue += 360
-            }
+    func analogousColors(amount: Int) -> [UIColor] {
+        var colors: [UIColor] = []
+        let hue = hueComponent()
+        let saturation = saturationComponent()
+        let brightness = brightnessComponent()
+        
+        let step = 1.0 / CGFloat(amount + 1)
+        
+        for i in 1...amount {
+            let newHue = (hue + (CGFloat(i) * step)).truncatingRemainder(dividingBy: 1.0)
+            let color = UIColor(hue: newHue, saturation: saturation, brightness: brightness, alpha: 1.0)
+            colors.append(color)
         }
-        let saturation = maxV == 0 ? 0 : (delta / maxV)
-        let brightness = maxV
-        return (h:hue/360, s:saturation, b:brightness)
+        
+        return colors
     }
     
+    func complementaryColors() -> [UIColor] {
+        let hue = hueComponent()
+        let complementHue = (hue + 0.5).truncatingRemainder(dividingBy: 1.0)
+        let saturation = saturationComponent()
+        let brightness = brightnessComponent()
+        
+        let color1 = UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1.0)
+        let color2 = UIColor(hue: complementHue, saturation: saturation, brightness: brightness, alpha: 1.0)
+        
+        return [color1, color2]
+    }
     
+    func triadicColors() -> [UIColor] {
+        let hue = hueComponent()
+        let triadicHue1 = (hue + 1.0/3.0).truncatingRemainder(dividingBy: 1.0)
+        let triadicHue2 = (hue + 2.0/3.0).truncatingRemainder(dividingBy: 1.0)
+        let saturation = saturationComponent()
+        let brightness = brightnessComponent()
+        
+        let color1 = UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1.0)
+        let color2 = UIColor(hue: triadicHue1, saturation: saturation, brightness: brightness, alpha: 1.0)
+        let color3 = UIColor(hue: triadicHue2, saturation: saturation, brightness: brightness, alpha: 1.0)
+        
+        return [color1, color2, color3]
+    }
+    
+    private func hueComponent() -> CGFloat {
+        var hue: CGFloat = 0.0
+        getHue(&hue, saturation: nil, brightness: nil, alpha: nil)
+        return hue
+    }
+    
+    private func saturationComponent() -> CGFloat {
+        var saturation: CGFloat = 0.0
+        getHue(nil, saturation: &saturation, brightness: nil, alpha: nil)
+        return saturation
+    }
+    
+    private func brightnessComponent() -> CGFloat {
+        var brightness: CGFloat = 0.0
+        getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
+        return brightness
+    }
 }
 
 ```
